@@ -16,7 +16,7 @@ options = OpenStruct.new(
 OptionParser.new do |o|
   o.on('-X method') { |val| options.http_method = val; }
   o.on('-H [a-z0-9:/]*') { |val| options.headers << val; }
-  o.on('--data postdata') { |val| options.data = val }
+  o.on('--data postdata') { |val| options.data = val; options.http_method = "POST" }
   o.on('--compressed') { |val| options.compressed = val }
 end.parse!()
 
