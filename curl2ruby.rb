@@ -28,18 +28,18 @@ require 'openssl'
 
 uri = URI.parse('#{url}')
 http = Net::HTTP.new(uri.host, uri.port)
-#{uri.scheme == "https" ? "http.use_ssl = true; http.verify_mode = OpenSSL::SSL::VERIFY_NONE" : ""}
-
+#{uri.scheme == "https" ? "http.use_ssl = true; http.verify_mode = OpenSSL::SSL::VERIFY_NONE\n" : ""}
 req = Net::HTTP::#{options.http_method.capitalize}.new(uri.path)
 #{options.data ? "req.body = '#{options.data}'" : ""}
+
 CODE
 
 code += "{\n"
 options.headers.each do |header|
   (name, value) = header.split(/:\s*/, 2)
-  code += "\t'#{name}' => '#{value}',\n"
+  code += "  '#{name}' => '#{value}',\n"
 end
-code += "}.each { |name, value| req.add_field(name, value) }\n"
+code += "}.each { |name, value| req.add_field(name, value) }\n\n"
 
 code += "resp = http.request(req)\n"
 code += "puts resp.body\n"
