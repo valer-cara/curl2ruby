@@ -34,10 +34,12 @@ req = Net::HTTP::#{options.http_method.capitalize}.new(uri.path)
 #{options.data ? "req.body = '#{options.data}'" : ""}
 CODE
 
+code += "{\n"
 options.headers.each do |header|
-  (name, value) = header.split(':', 2)
-  code += "req.add_field('#{name}', '#{value}')\n"
+  (name, value) = header.split(/:\s*/, 2)
+  code += "\t'#{name}' => '#{value}',\n"
 end
+code += "}.each { |name, value| req.add_field(name, value) }\n"
 
 code += "resp = http.request(req)\n"
 code += "puts resp.body\n"
